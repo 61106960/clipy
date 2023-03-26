@@ -114,7 +114,7 @@ Sender
 ![](https://github.com/61106960/clipy/raw/main/images/clipy-receiver-ps1.png)
 
 Receiver  
-![](https://github.com/61106960/clipy/raw/main/images/clipy-receiver-ps1.png)
+![](https://github.com/61106960/clipy/raw/main/images/clipy-receiver-ps2.png)
 
 ### Read the encrypted Powershell source file on the target computer and execute it
 
