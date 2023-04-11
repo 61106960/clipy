@@ -13,7 +13,7 @@ clipy can be run simply by starting the Powershell script via _invoke-clipy_ wit
 clipy takes your input file at the source machine, do some gzip compression, AES encryption, Base64 encoding and splits it in chunks with 2MB by default.  
 On the target receiver side, it takes the single chunks until it have received everything, puts all together, AES decrypts and gzip decompress the data. The received data will either be stored on the filesystem of the target system or, if your source file is a Powershell script, can directly be executed in the Powershell process if you like.
 
-As nice add-on, you can use clipy to build AES encrypted output files of source Powershell files and later on, read this encrypted files in the targets Powershell process, decrypt and executes it. If needed, you can execute an AMSI bypass to, to get your own Powershell script started. 
+As nice add-on, you can use clipy to build AES encrypted output files of source Powershell files and later on, read this encrypted files in the targets Powershell process, decrypt and executes it. If needed, you can execute an AMSI bypass too, to get your own Powershell script started. 
 
 ## Step by Step
 Let's jump to the details. After you have imported clipy to Powershell on both machines you starting it first on your source machine and point to the source file you want to copy to the target machine. clipy will do its tasks and provide you with some infos of the file and the current chunk will be copied to the clipboard directly.  
@@ -120,7 +120,7 @@ Receiver
 
 Clipy executes an AMSI bypass before it imports the modules of the AES encrypted Powershell input file.
 ```
-Invoke-Clipy -Action CryptFileRead - InputFile "crypted-ps1.txt" -PSH Import -AMSI
+Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -PSH Import -AMSI
 ```
 
 Clipy executes an AMSI bypass before it executes the AES encrypted Powershell input file.
