@@ -115,7 +115,7 @@
         [switch] $Force,
 
         [Parameter(Mandatory = $false, HelpMessage="Fine tune the base64 chunk size to your needs, 2MB are default")]
-        [ValidateSet("0.1MB", "0.25MB","0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB")]
+        [ValidateSet("0.1MB", "0.25MB", "0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB")]
         $maxSize,
 
         [Parameter(Mandatory = $false, HelpMessage="Use 'Import' if you want to import Powershell fuctions, or 'Execute' if you want to execute the Powershell code directly")]
@@ -400,7 +400,7 @@ function Get-ClipyInput {
     if (-not $CryptFileIn) { Write-Host "Waiting for incoming chunks..." }
     
     # change input of while loop to 'read clipboard' or 'read cryptfile'
-    while(![System.String]::IsNullOrEmpty($(if ($CryptFileIn) {($ClipInputRaw = Read-ClipyFile -FilePath $CryptFileIn -Format Text)} else {($ClipInputRaw = Get-Clipboard -Format Text -TextFormatType Text)}))) {
+    while(![System.String]::IsNullOrEmpty($(if ($CryptFileIn) {($ClipInputRaw = Read-ClipyFile -FilePath $CryptFileIn -Format Text)} else {($ClipInputRaw = Get-Clipboard -Raw)}))) {
         $ClipInput = $ClipInputRaw.split(".")
         <#
         $ClipInput[0] = Clipy header: ##
@@ -428,6 +428,7 @@ function Get-ClipyInput {
                         # if everything seems ok let's finish or proceed
                         if ($chunkNumber -gt $ClipInput[1]) {
                             Write-Host "Successfully read the complete content, proceeding further..."
+                            $ReadSuccess = $true
                             break
                         }
                     } else {
@@ -457,37 +458,41 @@ function Get-ClipyInput {
             if ($CryptFileIn) {
                 Throw "The content of '$CryptFileIn' is no valid crypted clipy file!"
             } else {
-                write-verbose "[Get-ClipyInput] Content of clipboard: $($ClipInputRaw.substring(0,$ClipInputRaw.length))"
+                write-verbose "[Get-ClipyInput] Content of clipboard: '$($ClipInputRaw.substring(0,$ClipInputRaw.length))'"
                 $text = "There was something in the clipboard but that was no valid chunk, press any key and try again!"
                 Read-Host -Prompt $text | Out-Null
             }
         }
     }
 
-    # AES decrypt, base64 decode and decompress imported data
-    try {
-        Write-Verbose "[Get-ClipyInput] Do AES decrypting of data..."
-        $outputBlobB64 = Invoke-AESEncryption -Mode Decrypt -Key $AESKey -Text $content
-
+    if ($ReadSuccess) {
+        # AES decrypt, base64 decode and decompress imported data
         try {
-            Write-Verbose "[Get-ClipyInput] Do Base64 decoding of data..."
-            $outputBlob = $([System.Convert]::FromBase64String($outputBlobB64))
+            Write-Verbose "[Get-ClipyInput] Do AES decrypting of data..."
+            $outputBlobB64 = Invoke-AESEncryption -Mode Decrypt -Key $AESKey -Text $content
 
             try {
-                $output = Get-DecompressedByteArray -byteArray $outputBlob
-                return $output
+                Write-Verbose "[Get-ClipyInput] Do Base64 decoding of data..."
+                $outputBlob = $([System.Convert]::FromBase64String($outputBlobB64))
 
+                try {
+                    $output = Get-DecompressedByteArray -byteArray $outputBlob
+                    return $output
+
+                } catch {
+                    Write-Error "[Get-ClipyInput] Error decompressing Base64 blob: $_"
+                    break
+                }
             } catch {
-                Write-Error "[Get-ClipyInput] Error decompressing Base64 blob: $_"
+                Write-Error "[Get-ClipyInput] Error decrypting AES stream: $_"
                 break
             }
         } catch {
             Write-Error "[Get-ClipyInput] Error decrypting AES stream: $_"
             break
         }
-    } catch {
-        Write-Error "[Get-ClipyInput] Error decrypting AES stream: $_"
-        break
+    } else {
+        Write-Error "[Get-ClipyInput] Oooops, something went terrible wrong. Likely there was binary data in the clipboard!"
     }
 }
 
