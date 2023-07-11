@@ -22,7 +22,7 @@
     Use your own AES key for encryption and decryption instead of the pre-defined own of clipy.
     
     .PARAMETER maxSize
-    Fine tune the base64 chunk size to your needs, 2MB are default. Possible values are "0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB".
+    Fine tune the base64 chunk size to your needs, 2MB are default. Possible values are "0.1MB", "0.25MB", "0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB".
     
     .PARAMETER PSH
     Use 'Import' if you want to import Powershell fuctions, or 'Execute' if you want to execute the Powershell code directly.
@@ -115,7 +115,7 @@
         [switch] $Force,
 
         [Parameter(Mandatory = $false, HelpMessage="Fine tune the base64 chunk size to your needs, 2MB are default")]
-        [ValidateSet("0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB")]
+        [ValidateSet("0.1MB", "0.25MB","0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB")]
         $maxSize,
 
         [Parameter(Mandatory = $false, HelpMessage="Use 'Import' if you want to import Powershell fuctions, or 'Execute' if you want to execute the Powershell code directly")]
@@ -193,7 +193,7 @@ function Send-ClipValue {
     Use your own AES key for encryption and decryption instead of the pre-defined own of clipy.
     
     .PARAMETER maxSize
-    Fine tune the base64 chunk size to your needs, 2MB are default. Possible values are "0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB".
+    Fine tune the base64 chunk size to your needs, 2MB are default. Possible values are "0.1MB", "0.25MB", "0.5MB", "1MB", "1.4MB", "1.6MB", "1.8MB", "2MB", "2.5MB", "4MB", "6MB", "8MB", "10MB", "20MB", "50MB".
     #>
     param (
         [Parameter(Mandatory=$true)]
