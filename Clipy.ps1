@@ -127,7 +127,7 @@
     )
 
     # show clipy logo
-    $clipyVersion = '0.1.0'
+    $clipyVersion = '0.1.1'
     Get-ANSI -Color Blue -Value $clipyVersion -Logo
 
     # build the arguments
