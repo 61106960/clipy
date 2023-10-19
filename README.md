@@ -26,7 +26,7 @@ You will have to do this tasks again and again until all the chunks are on the t
 
 clipy consists of the following functions:
 * Action - Select if clipy is in _Sender_ or _Receiver_ mode or use _CryptFileWrite_ and _CryptFileRead_ to build an AES encrypted output file or read it back in again.
-* PSH - If the source file is a Powershell file, you can import its modules directly in the target Powershell process with _Import_ or just execute the Powershell code with _Excute_, both variants execute your Powershell code without storing the file to disk.
+* InlineExec - If the source file is a Powershell file, you can import its modules directly in the target Powershell process with _Import_ or just execute the Powershell code with _Excute_, both variants execute your Powershell code without storing the file to disk. You can import and execute C# and PE files as well.
 * AMSI - Executes an AMSI bypass in the target Powershell process before you import modules or execute code.
 
 
@@ -96,17 +96,17 @@ Invoke-Clipy -Action Receive -OutputFile "target-file.exe" -AESKey "Secr3tP8ssw0
 
 Clipy imports the Powershell modules of the received Powershell file.
 ```
-Invoke-Clipy -Action Receive -PSH Import
+Invoke-Clipy -Action Receive -InlineExec PSHImport
 ```
 
 Clipy executes an AMSI bypass before it imports the modules of the received Powershell file and uses a specific AES decryption key instead of the default one.
 ```
-Invoke-Clipy -Action Receive -PSH Import -AMSI -AESKey "Secr3tP8ssw0rd!"
+Invoke-Clipy -Action Receive -InlineExec PSHImport -AMSI -AESKey "Secr3tP8ssw0rd!"
 ```
 
 Clipy executes an AMSI bypass before it executes the received Powershell file.
 ```
-Invoke-Clipy -Action Receive -PSH Execute -AMSI
+Invoke-Clipy -Action Receive -InlineExec PSHExecute -AMSI
 ```
 
 ### How it looks like in action
@@ -120,12 +120,12 @@ Receiver
 
 Clipy executes an AMSI bypass before it imports the modules of the AES encrypted Powershell input file.
 ```
-Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -PSH Import -AMSI
+Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -InlineExec PSHImport -AMSI
 ```
 
 Clipy executes an AMSI bypass before it executes the AES encrypted Powershell input file.
 ```
-Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -PSH Execute -AMSI
+Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -InlineExec PSHExecute -AMSI
 ```
 
 ### How it looks like in action
