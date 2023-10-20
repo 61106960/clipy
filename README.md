@@ -104,11 +104,6 @@ Clipy executes an AMSI bypass before it imports the modules of the received Powe
 Invoke-Clipy -Action Receive -InlineExec PSHImport -AMSI -AESKey "Secr3tP8ssw0rd!"
 ```
 
-Clipy executes an AMSI bypass before it executes the received Powershell file.
-```
-Invoke-Clipy -Action Receive -InlineExec PSHExecute -AMSI
-```
-
 ### How it looks like in action
 Sender  
 ![](https://github.com/61106960/clipy/raw/main/images/clipy-receiver-ps1.png)
@@ -121,11 +116,6 @@ Receiver
 Clipy executes an AMSI bypass before it imports the modules of the AES encrypted Powershell input file.
 ```
 Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -InlineExec PSHImport -AMSI
-```
-
-Clipy executes an AMSI bypass before it executes the AES encrypted Powershell input file.
-```
-Invoke-Clipy -Action CryptFileRead -InputFile "crypted-ps1.txt" -InlineExec PSHExecute -AMSI
 ```
 
 ### How it looks like in action
